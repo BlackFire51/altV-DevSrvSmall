@@ -3,7 +3,7 @@ import alt from 'alt'
 
 game.setPedDefaultComponentVariation(game.playerPedId());
 
-alt.on('consoleCommand', function(...args) {
+alt.on('consoleCommand', function(...args) { // client side console 
 
     switch (args[0]) {
         case "max":
@@ -11,11 +11,11 @@ alt.on('consoleCommand', function(...args) {
             return;
             break;
         case "c":
-        case "cloth":
+        case "cloth": // set cloth on Player
             alt.log("cloth " + (+args[1]) + " " + (+args[2]))
             game.setPedComponentVariation(game.playerPedId(), +args[1], +args[2], 0, 0); // Set CLoth
             return;
-        default:
+        default: // send command to server
             let argsArr = Array.from(args)
             if (argsArr.join(' ').trim().length < 1) return;
             alt.log(`You Typed: ${argsArr.join(' ')}`);
@@ -26,7 +26,7 @@ alt.on('consoleCommand', function(...args) {
 
 let localPlayer = alt.Player.local;
 let speed = 0
-alt.setInterval(() => { // onRender
+alt.setInterval(() => { // onRender 
     //### Tacho
     if (localPlayer.vehicle) {
         speed = localPlayer.vehicle.speed
@@ -37,7 +37,7 @@ alt.setInterval(() => { // onRender
     game.invalidateIdleCam()
 }, 0)
 
-
+//Helper to draw text on hud
 //wordwrap not implemented
 function drawText(text, xPos, yPos, scale, r, g, b, alpha) { //font, justify, shadow, outline, wordwrap
 

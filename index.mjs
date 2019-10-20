@@ -1,19 +1,19 @@
 import alt from 'alt';
 
-alt.on('playerConnect', (player) => {
+alt.on('playerConnect', (player) => { //on player connect set model and spawn at 0 0
     player.model = 1885233650
-    player.spawn(0, 0, 72, 0);
+    player.spawn(0, 0, 71, 0);
 });
 
-alt.on('consoleCommand', (...args) => {
+alt.on('consoleCommand', (...args) => { // take inputs from server Console
     let argsArr = Array.from(args)
     if (argsArr.join(' ').trim().length < 1) return;
     consoleExec(null, argsArr)
 });
-alt.onClient("execCmd", (player, args) => {
+alt.onClient("execCmd", (player, args) => { // get inputs from client Console
     consoleExec(player, args)
 })
-const posArr = [
+const posArr = [ // pos array to enable spawning veh from server console
     { x: 0, y: 10, z: 70 },
     { x: 0, y: 13, z: 70 },
     { x: 0, y: 16, z: 70 },
@@ -21,13 +21,13 @@ const posArr = [
 ]
 let posPtr = 0
 
-function consoleExec(player, args) {
+function consoleExec(player, args) { // interpret command
     console.log("got cmd", args)
-    if (args[0] == undefined) return;
-    const func = args[0]
-    args.shift()
+    if (args[0] == undefined) return; // no command given return
+    const func = args[0] // get funcion name
+    args.shift() // shift to remove func name from array
     switch (func) {
-        case 'veh':
+        case 'veh': //spawn vehicle
             let className = args[0]
             console.log("Create new Temp Veh ", className)
             let pos = posArr[posPtr]
@@ -36,25 +36,25 @@ function consoleExec(player, args) {
                 pos.y += 3
 
             }
-            vehObj.spawnVehicleTEMP(null, className, pos, { x: 0, y: 0, z: 0 }, [0, 0, 0, 0, 0, 0], 99)
+            let veh = new alt.Vehicle(className, pos.x, pos.y, pos.z, 0, 0, 0);
             posPtr = (posPtr + 1) % posArr.length
             break;
-        case 'respawn':
+        case 'respawn': // respawn player
             if (player == null) return;
             player.spawn(0, 0, 72, 0);
             break;
-        case 'tp':
+        case 'tp': //tp player
             if (player == null) return;
             let str = args.join(' ')
             let groups = str.match(/\s*(\d+\.?\d*)[,\s]+(\d+\.?\d*)[,\s]+(\d+\.?\d*)/)
 
             player.pos = { x: +groups[1], y: +groups[2], z: +groups[3] }
             break;
-        case 'delveh':
+        case 'delveh': // del vehicle in wich
             if (player == null || !player.vehicle) return;
             player.vehicle.destroy();
             break;
-        case 'delveh1':
+        case 'delveh1': // del fist vehicle in altV array
             if (alt.Vehicle.all.length > 0) {
                 alt.Vehicle.all[0].destroy();
                 console.log("done")
@@ -67,21 +67,3 @@ function consoleExec(player, args) {
             break;
     }
 }
-
-class VehicleServerClass {
-
-    spawnVehicleTEMP(err, className, positionVec3, rotationVec3, color, ownerId) {
-        if (err) {
-            log.error("err: ", err)
-            return;
-        }
-        console.log("Create new Temp Veh ", className)
-        let veh = new alt.Vehicle(className, positionVec3.x, positionVec3.y, positionVec3.z, rotationVec3.x, rotationVec3.y, rotationVec3.z);
-
-        veh.customPrimaryColor = { r: color[0], g: color[1], b: color[2] }
-        veh.customSecondaryColor = { r: color[3], g: color[4], b: color[5] };
-        console.log("return new Veh ")
-        return veh
-    }
-}
-const vehObj = new VehicleServerClass()
