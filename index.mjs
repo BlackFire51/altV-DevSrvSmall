@@ -43,6 +43,13 @@ function consoleExec(player, args) {
             if (player == null) return;
             player.spawn(0, 0, 72, 0);
             break;
+        case 'tp':
+            if (player == null) return;
+            let str = args.join(' ')
+            let groups = str.match(/\s*(\d+\.?\d*)[,\s]+(\d+\.?\d*)[,\s]+(\d+\.?\d*)/)
+
+            player.pos = { x: +groups[1], y: +groups[2], z: +groups[3] }
+            break;
         case 'delveh':
             if (player == null || !player.vehicle) return;
             player.vehicle.destroy();
