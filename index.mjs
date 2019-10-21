@@ -46,7 +46,7 @@ function consoleExec(player, args) { // interpret command
         case 'tp': //tp player
             if (player == null) return;
             let str = args.join(' ')
-            let groups = str.match(/\s*(\d+\.?\d*)[,\s]+(\d+\.?\d*)[,\s]+(\d+\.?\d*)/)
+            let groups = str.match(/\s*(-?\s?\d+\.?\d*)[,\s]+(-?\s?\d+\.?\d*)[,\s]+(-?\s?\d+\.?\d*)/)
 
             player.pos = { x: +groups[1], y: +groups[2], z: +groups[3] }
             break;
