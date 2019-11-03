@@ -61,9 +61,41 @@ function consoleExec(player, args) { // interpret command
             } else {
                 console.log("No veh Left")
             }
-
+			break;
+		case 'gib': // del fist vehicle in altV array
+			let weaponName = args[0]
+			if (!weaponName || weaponName.length < 1) return
+			let hash= +weaponName
+			if(isNaN(hash) || hash < 1000){ // if we entery a numer we use it as hash .. otherwise we compute a hash
+				weaponName=weaponName.toLowerCase()
+				if(!weaponName.startsWith('weapon_') && !weaponName.startsWith('gadget_') ) weaponName = 'weapon_' + weaponName
+				hash = alt.hash(weaponName);
+			}
+			player.giveWeapon(hash, 1000, true);
+			console.log("ply ", player.name, " spawned weapon: ",weaponName,":", hash)
             break;
         default:
             break;
     }
+}
+
+//#######################
+//### Helper
+//#######################
+alt.hash = (key) => {
+	var keyLowered = key.toLowerCase();
+	var length = keyLowered.length;
+	var hash, i;
+	for (hash = i = 0; i < length; i++) {
+		hash += keyLowered.charCodeAt(i);
+		hash += (hash << 10);
+		hash ^= (hash >>> 6);
+	}
+	hash += (hash << 3);
+	hash ^= (hash >>> 11);
+	hash += (hash << 15);
+	return convertToUnsigned(hash);
+}
+function convertToUnsigned(value) {
+	return (value >>> 0);
 }
