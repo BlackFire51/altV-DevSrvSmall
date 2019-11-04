@@ -14,6 +14,17 @@ alt.on('consoleCommand', function(...args) { // client side console
         case "cloth": // set cloth on Player
             alt.log("cloth " + (+args[1]) + " " + (+args[2]))
             game.setPedComponentVariation(game.playerPedId(), +args[1], +args[2], 0, 0); // Set CLoth
+			return;
+		case "settime": // set cloth on Player
+			if(+args[1]<0) return
+			let hour=(+args[1])%24
+			let min=0
+			if(+args[2]>0) {
+				min=(+args[2])%60
+			}
+			game.advanceClockTimeTo(hour, min, 0)
+			alt.log("Set Gametime: "+hour+":"+min)
+			alt.setMsPerGameMinute(60000)
             return;
         default: // send command to server
             let argsArr = Array.from(args)
