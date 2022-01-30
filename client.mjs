@@ -65,5 +65,5 @@ function drawText(text, xPos, yPos, scale, r, g, b, alpha) { //font, justify, sh
     game.beginTextCommandDisplayText("STRING");
     game.addTextComponentSubstringPlayerName(text);
 
-    game.endTextCommandDisplayText(xPos, yPos);
+    game.endTextCommandDisplayText(xPos, yPos,0);
 }

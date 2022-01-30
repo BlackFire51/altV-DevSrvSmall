@@ -32,9 +32,7 @@ function consoleExec(player, args) { // interpret command
             console.log("Create new Temp Veh ", className)
             let pos = posArr[posPtr]
             if (player != null) {
-                pos = player.pos
-                pos.y += 3
-
+                pos = player.pos.add(4,0,0)
             }
             let veh = new alt.Vehicle(className, pos.x, pos.y, pos.z, 0, 0, 0);
             posPtr = (posPtr + 1) % posArr.length
@@ -48,7 +46,7 @@ function consoleExec(player, args) { // interpret command
             let str = args.join(' ')
             let groups = str.match(/\s*(-?\s?\d+\.?\d*)[,\s]+(-?\s?\d+\.?\d*)[,\s]+(-?\s?\d+\.?\d*)/)
 
-            player.pos = { x: +groups[1], y: +groups[2], z: +groups[3] }
+            player.pos = new alt.Vector3({ x: +groups[1], y: +groups[2], z: +groups[3] } )
             break;
         case 'delveh': // del vehicle in wich
             if (player == null || !player.vehicle) return;
@@ -77,25 +75,4 @@ function consoleExec(player, args) { // interpret command
         default:
             break;
     }
-}
-
-//#######################
-//### Helper
-//#######################
-alt.hash = (key) => {
-	var keyLowered = key.toLowerCase();
-	var length = keyLowered.length;
-	var hash, i;
-	for (hash = i = 0; i < length; i++) {
-		hash += keyLowered.charCodeAt(i);
-		hash += (hash << 10);
-		hash ^= (hash >>> 6);
-	}
-	hash += (hash << 3);
-	hash ^= (hash >>> 11);
-	hash += (hash << 15);
-	return convertToUnsigned(hash);
-}
-function convertToUnsigned(value) {
-	return (value >>> 0);
 }
