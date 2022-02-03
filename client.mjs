@@ -15,6 +15,12 @@ alt.on('consoleCommand', function(...args) { // client side console
             alt.log("cloth " + (+args[1]) + " " + (+args[2]))
             game.setPedComponentVariation(game.playerPedId(), +args[1], +args[2], 0, 0); // Set CLoth
 			return;
+		case "clothCEF": // open/close clothCEF
+            if(!clothCef)
+				openClothCef()
+			else
+				closeClothCef()
+			return;
 		case "settime": // set cloth on Player
 			if(+args[1]<0) return
 			let hour=(+args[1])%24
@@ -66,4 +72,28 @@ function drawText(text, xPos, yPos, scale, r, g, b, alpha) { //font, justify, sh
     game.addTextComponentSubstringPlayerName(text);
 
     game.endTextCommandDisplayText(xPos, yPos,0);
+}
+let clothCef=null
+function openClothCef(){
+	clothCef= new alt.WebView("https://matze.space/gta5/clothView/index.html")
+	clothCef.focus()
+	alt.toggleGameControls(false)
+	alt.showCursor(true)
+	clothCef.on("setCamPosition",(rot)=>{
+		game.setEntityRotation( game.playerPedId(), 0, 0, rot, 2, false ); // set rotation - becaus we are frezzed we can not turn
+		game.setPedDesiredHeading( game.playerPedId(), rot ); // this is to stop ped try to rotate and twich around
+	})
+	clothCef.on("setCloth",(slot,draw,tex,pallet)=>{
+		game.isPedComponentVariationValid(alt.Player.local.scriptID, slot, draw, tex);
+		game.setPedComponentVariation(alt.Player.local.scriptID, slot, draw, tex, pallet);
+	})
+}
+
+function closeClothCef() {
+	if(clothCef){
+		clothCef.destroy()
+		clothCef=null
+	}
+	alt.toggleGameControls(true)
+	alt.showCursor(false)
 }
