@@ -1,7 +1,8 @@
 import alt from 'alt';
-
+const MDL_FEMALE=0x9C9EFFD8
+const MDL_MALE=0x705E61F2
 alt.on('playerConnect', (player) => { //on player connect set model and spawn at 0 0
-    player.model = 1885233650
+    player.model = MDL_MALE
     player.spawn(0, 0, 71, 0);
 });
 
@@ -72,6 +73,14 @@ function consoleExec(player, args) { // interpret command
 			player.giveWeapon(hash, 1000, true);
 			console.log("ply ", player.name, " spawned weapon: ",weaponName,":", hash)
             break;
+		case 'gender': // 
+		console.log("got gender",args[0])
+            if(args[0]==0){
+				player.model = MDL_FEMALE
+			}else{
+				player.model = MDL_MALE
+			}
+			break;
         default:
             break;
     }
